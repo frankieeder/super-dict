@@ -4,7 +4,7 @@ class SetDict(dict):
         self._view = self.keys
 
     def inverse(self):
-        return {v: k for k, v in self.items()}
+        return SetDict({v: k for k, v in self.items()})
 
     def __neg__(self):
         return self.inverse()
@@ -14,7 +14,8 @@ class SetDict(dict):
 
     def intersect(self, other, in_place=False):
         if in_place:
-            for k in self._view() - set(other):
+            allowable_items = self._view() - set(other)
+            for k in allowable_items:
                 self.pop(k)
             return self
         return self.copy().intersect(other, in_place=True)
