@@ -1,4 +1,8 @@
 class SetDict(dict):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._view = self.keys
+
     def inverse(self):
         return {v: k for k, v in self.items()}
 
@@ -9,13 +13,11 @@ class SetDict(dict):
         return self.inverse()
 
     def intersect(self, other, in_place=False):
-        keys = set(other)
         if in_place:
-            for k in self.keys() - keys:
+            for k in self._view() - set(other):
                 self.pop(k)
             return self
-        else:
-            return SetDict({k: v for k, v in self.items() if k in keys})
+        return self.copy().intersect(other, in_place=True)
 
     def __and__(self, other):
         return self.intersect(other, in_place=False)
@@ -27,10 +29,7 @@ class SetDict(dict):
         if in_place:
             self.update(other)
             return self
-        else:
-            new = self.copy()
-            new.update(other)
-            return new
+        return self.copy().union(other, in_place=True)
 
     def __or__(self, other):
         return self.union(other, in_place=False)
@@ -45,8 +44,7 @@ class SetDict(dict):
                 if k in self:
                     self.pop(k)
             return self
-        else:
-            return SetDict({k: v for k, v in self.items() if k not in keys})
+        return self.copy().subtract(other, in_place=True)
 
     def __sub__(self, other):
         return self.subtract(other, in_place=False)
@@ -58,8 +56,7 @@ class SetDict(dict):
             self.union(other, in_place=True)
             self.subtract(intersection, in_place=True)
             return self
-        else:
-            return (self | other) - intersection
+        return self.copy().xor(other, in_place=True)
 
     def __xor__(self, other):
-        return self.xor(other)
+        return self.xor(other, in_place=False)
