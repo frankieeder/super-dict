@@ -4,7 +4,7 @@ class SetDict(dict):
         self._view = self.keys  # TODO: Support other views, comparing by value() or items()
 
     def inverse(self):
-        return SetDict({v: k for k, v in self.items()})
+        return self.__class__({v: k for k, v in self.items()})
 
     def __neg__(self):
         return self.inverse()
@@ -24,7 +24,7 @@ class SetDict(dict):
         return self.intersect(other, in_place=False)
 
     def copy(self):
-        return SetDict(self)
+        return self.__class__(self)
 
     def union(self, other, in_place=False):
         if in_place:
