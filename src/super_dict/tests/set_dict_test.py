@@ -1,6 +1,4 @@
-if __name__ == '__main__':
-    from super_dict import SetDict
-
+def test_by_keys():
     d1 = SetDict(a=1, b=2)
     d2 = SetDict(b=2, c=3)
 
@@ -31,13 +29,7 @@ if __name__ == '__main__':
     assert d1 ^ d2 == xor
 
 
+if __name__ == '__main__':
+    from super_dict import SetDict
 
-
-
-
-
-
-
-
-
-
+    test_by_keys()
