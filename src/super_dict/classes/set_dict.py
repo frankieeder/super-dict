@@ -1,6 +1,24 @@
 class SetDict(dict):
-    def __neg__(self):
+    def inverse(self):
         return {v: k for k, v in self.items()}
+
+    def __neg__(self):
+        return self.inverse()
+
+    def __invert__(self):
+        return self.inverse()
+
+    def intersect(self, other, in_place=False):
+        keys = set(other)
+        if in_place:
+            for k in self.keys() - keys:
+                self.pop(k)
+            return self
+        else:
+            return SetDict({k: v for k, v in self.items() if k in keys})
+
+    def __and__(self, other):
+        return self.intersect(other, in_place=False)
 
     def copy(self):
         return SetDict(self)
@@ -32,18 +50,6 @@ class SetDict(dict):
 
     def __sub__(self, other):
         return self.subtract(other, in_place=False)
-
-    def intersect(self, other, in_place=False):
-        keys = set(other)
-        if in_place:
-            for k in self.keys() - keys:
-                self.pop(k)
-            return self
-        else:
-            return SetDict({k: v for k, v in self.items() if k in keys})
-
-    def __and__(self, other):
-        return self.intersect(other, in_place=False)
 
     def xor(self, other, in_place=False):
         keys = set(other)
