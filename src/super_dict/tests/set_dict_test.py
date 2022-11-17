@@ -2,6 +2,11 @@ def test_by_keys():
     d1 = SetDict(a=1, b=2)
     d2 = SetDict(b=2, c=3)
 
+    inverse_d1 = SetDict({1: 'a', 2: 'b'})
+    assert d1.inverse() == inverse_d1
+    assert -d1 == inverse_d1
+    assert ~d1 == inverse_d1
+
     union = SetDict(a=1, b=2, c=3)
     assert d1.union(d2) == union
     assert d1.copy().union(d2, in_place=True) == union
