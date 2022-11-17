@@ -1,7 +1,7 @@
 class SetDict(dict):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._view = self.keys
+        self._view = self.keys  # TODO: Support other views, comparing by value() or items()
 
     def inverse(self):
         return SetDict({v: k for k, v in self.items()})
